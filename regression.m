@@ -22,15 +22,15 @@ M = table2array(readtable('data.xlsx'));
 % Large Pot
 t_l = M(:,1); % s
 T_l = M(:,2); % C
-hL_l = M(:,3); % W/(m^2-K)
-hD_l = M(:,4); % W/(m^2-K)
+hL_l = mean(M(:,3)); % W/(m^2-K)
+hD_l = mean(M(:,4)); % W/(m^2-K)
 n_l = length(t_l);
 
 % Small Pot
 t_s = M(:,5); % s
 T_s = M(:,6); % C
-hL_s = M(:,7); % W/(m^2-K)
-hD_s = M(:,8); % W/(m^2-K)
+hL_s = mean(M(:,7)); % W/(m^2-K)
+hD_s = mean(M(:,8)); % W/(m^2-K)
 n_s = length(t_s);
 
 T_water = @(a,b,t,Ti) Tinf+(Ti-Tinf)*(exp(-a*t)+(b/a)/(Ti-Tinf)*(1-exp(-a*t)));
@@ -39,12 +39,12 @@ T_water = @(a,b,t,Ti) Tinf+(Ti-Tinf)*(exp(-a*t)+(b/a)/(Ti-Tinf)*(1-exp(-a*t)));
 e_min = inf;
 q_in = -1;
 T_w_correct = [];
+a = 1/(m_water*c)*(hL_l*A_pot_wall_l+hD_l*A_wat_top_l);
 
 for q_i = 1:0.01:10000 % q_i is q_in being tested
     e = 0;
     T_w_calc_i = zeros(1,n_l);
     for j = 1:1:n_l
-        a = 1/(m_water*c)*(hL_l(j)*A_pot_wall_l+hD_l(j)*A_wat_top_l);
         b = q_i/(m_water*c);
         T_w_calc = T_water(a,b,t_l(j),T_l(j));
         T_w_calc_i(j) = T_w_calc;
@@ -64,12 +64,12 @@ T_w_correct
 e_min = inf;
 q_in = -1;
 T_w_correct = [];
+a = 1/(m_water*c)*(hL_s*A_pot_wall_s+hD_s*A_wat_top_s);
 
 for q_i = 1:0.01:10000 % q_i is q_in being tested
     e = 0;
     T_w_calc_i = zeros(1,n_s);
     for j = 1:1:n_l
-        a = 1/(m_water*c)*(hL_s(j)*A_pot_wall_s+hD_s(j)*A_wat_top_s);
         b = q_i/(m_water*c);
         T_w_calc = T_water(a,b,t_s(j),T_s(j));
         T_w_calc_i(j) = T_w_calc;
@@ -82,5 +82,5 @@ for q_i = 1:0.01:10000 % q_i is q_in being tested
     end
 end
 
-fprintf('\nSmall Pot: q_in = %.2f W\n',q_in);
+fprintf('\nSmall Pot: q_in = %.2f W',q_in);
 T_w_correct   
