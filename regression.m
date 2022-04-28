@@ -60,8 +60,12 @@ end
 fprintf('\nLarge Pot: q_in = %.2f W',q_in);
 T_w_correct
 
+e = 1;
+error = zeros(1,n_l);
+error(:) = e;
+
 figure(1)
-plot(t_l,T_l,'-','Marker','.','MarkerSize',10)
+errorbar(t_l,T_l,error,'-','Marker','.','MarkerSize',10)
 hold on
 plot(t_l,T_w_correct)
 hold off
@@ -95,8 +99,12 @@ end
 fprintf('\nSmall Pot: q_in = %.2f W',q_in);
 T_w_correct   
 
+e = 1;
+error = zeros(1,n_s);
+error(:) = e;
+
 figure(2)
-plot(t_s,T_s,'-','Marker','.','MarkerSize',10)
+errorbar(t_s,T_s,error,'-','Marker','.','MarkerSize',10)
 hold on
 plot(t_s,T_w_correct)
 hold off
