@@ -46,7 +46,7 @@ for q_i = 1:0.01:10000 % q_i is q_in being tested
     T_w_calc_i = zeros(1,n_l);
     for j = 1:1:n_l
         b = q_i/(m_water*c);
-        T_w_calc = T_water(a,b,t_l(j),T_l(j));
+        T_w_calc = T_water(a,b,t_l(j),T_l(1));
         T_w_calc_i(j) = T_w_calc;
         e = e + (T_w_calc - T_l(j))^2;
     end
@@ -60,6 +60,16 @@ end
 fprintf('\nLarge Pot: q_in = %.2f W',q_in);
 T_w_correct
 
+figure(1)
+plot(t_l,T_l,'-','Marker','.','MarkerSize',10)
+hold on
+plot(t_l,T_w_correct)
+hold off
+title('Large Pot Temperature vs. Time')
+xlabel('Time (s)')
+ylabel('Temperature (°C)')
+legend({'Raw Temperatures','Lumped Capacitance'},'location','southeast')
+
 %% Small Pot
 e_min = inf;
 q_in = -1;
@@ -71,7 +81,7 @@ for q_i = 1:0.01:10000 % q_i is q_in being tested
     T_w_calc_i = zeros(1,n_s);
     for j = 1:1:n_l
         b = q_i/(m_water*c);
-        T_w_calc = T_water(a,b,t_s(j),T_s(j));
+        T_w_calc = T_water(a,b,t_s(j),T_s(1));
         T_w_calc_i(j) = T_w_calc;
         e = e + (T_w_calc - T_s(j))^2;
     end
@@ -84,3 +94,14 @@ end
 
 fprintf('\nSmall Pot: q_in = %.2f W',q_in);
 T_w_correct   
+
+figure(2)
+plot(t_s,T_s,'-','Marker','.','MarkerSize',10)
+hold on
+plot(t_s,T_w_correct)
+hold off
+title('Small Pot')
+title('Small Pot Temperature vs. Time')
+xlabel('Time (s)')
+ylabel('Temperature (°C)')
+legend({'Raw Temperatures','Lumped Capacitance'},'location','southeast')
